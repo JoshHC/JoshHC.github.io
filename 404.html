@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 · David Higueros</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230071e3'/%3E%3Ctext x='50%25' y='53%25' font-family='-apple-system,Helvetica,Arial,sans-serif' font-size='30' font-weight='700' fill='white' text-anchor='middle' dominant-baseline='middle'%3EDH%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#ffffff; --surface:#f5f5f7; --card-bg:#ffffff;
+    --ink:#1d1d1f; --ink-2:#6e6e73;
+    --line:#e3e3e6; --line-2:#d2d2d7;
+    --accent:#0071e3; --accent-2:#0077ed;
+    --font:"Inter",-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Helvetica,Arial,sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#000000; --surface:#161617; --card-bg:#1c1c1e;
+      --ink:#f5f5f7; --ink-2:#a1a1a6;
+      --line:#2a2a2c; --line-2:#3a3a3c;
+      --accent:#2997ff; --accent-2:#3aa0ff;
+    }
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%}
+  body{font-family:var(--font);color:var(--ink);background:radial-gradient(60% 55% at 50% 0%, color-mix(in srgb, var(--accent) 9%, transparent), transparent 70%),var(--bg);min-height:100vh;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
+  a{color:var(--accent);text-decoration:none}
+  .top{display:flex;align-items:center;justify-content:space-between;max-width:1024px;width:100%;margin:0 auto;padding:16px 24px}
+  .brand{font-size:15px;font-weight:600;letter-spacing:-.01em;color:var(--ink)}
+  .lang{font-size:12px;font-weight:500;color:var(--ink);border:1px solid var(--line-2);background:transparent;border-radius:980px;padding:4px 12px;cursor:pointer;letter-spacing:.02em}
+  .lang:hover{background:var(--surface)}
+  main{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:40px 24px 96px}
+  .code{font-size:clamp(84px,18vw,168px);font-weight:700;letter-spacing:-.04em;line-height:1;color:var(--accent)}
+  h1{font-size:clamp(26px,4vw,40px);font-weight:600;letter-spacing:-.02em;color:var(--ink);margin-top:8px}
+  .sub{font-size:clamp(16px,2vw,19px);color:var(--ink-2);line-height:1.55;max-width:440px;margin:16px auto 0}
+  .btn{display:inline-flex;align-items:center;gap:6px;font-size:16px;font-weight:400;border-radius:980px;padding:11px 26px;cursor:pointer;border:1px solid transparent;background:var(--accent);color:#fff;margin-top:32px;transition:background .2s}
+  .btn:hover{background:var(--accent-2)}
+  @keyframes in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .code,h1,.sub,.btn{animation:in .8s cubic-bezier(.22,.61,.36,1) both}
+  h1{animation-delay:.08s}.sub{animation-delay:.16s}.btn{animation-delay:.24s}
+  @media(prefers-reduced-motion:reduce){.code,h1,.sub,.btn{animation:none}}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+</style>
+</head>
+<body>
+  <div class="top">
+    <a class="brand" href="/">David Higueros</a>
+    <button class="lang" id="langBtn" aria-label="Switch language">ES</button>
+  </div>
+  <main>
+    <p class="code">404</p>
+    <h1 data-en="Page not found." data-es="Página no encontrada.">Page not found.</h1>
+    <p class="sub" data-en="The page you're looking for doesn't exist or may have been moved." data-es="La página que buscas no existe o pudo haber sido movida.">The page you're looking for doesn't exist or may have been moved.</p>
+    <a class="btn" href="/" data-en="Back to home" data-es="Volver al inicio">Back to home</a>
+  </main>
+<script>
+  (function(){
+    var b=document.getElementById('langBtn'),lang='en';
+    function apply(l){document.querySelectorAll('[data-en]').forEach(function(el){var v=el.getAttribute('data-'+l);if(v!==null)el.innerHTML=v;});document.documentElement.lang=l;b.textContent=(l==='en')?'ES':'EN';}
+    b.addEventListener('click',function(){lang=(lang==='en')?'es':'en';apply(lang);});
+  })();
+</script>
+</body>
+</html>
