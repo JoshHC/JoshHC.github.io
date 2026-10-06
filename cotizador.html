@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Code It · Cotizador de servicios web</title>
+<meta name="description" content="Arma tu cotización de sitio web en un minuto: paquete recomendado, adicionales y mantenimiento, con precios claros en quetzales.">
+<meta property="og:title" content="Code It · Cotizador">
+<meta property="og:description" content="Arma tu cotización de sitio web en un minuto.">
+<meta property="og:url" content="https://joshhc.github.io/cotizador.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#f5f5f7; --ink2:#a1a1a6; --accent:#0071e3; --accent2:#2997ff;
+    --bg:#000; --card:#141416; --line:rgba(255,255,255,.14);
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  html{scroll-padding-top:env(safe-area-inset-top,0px)}
+  *,*::before,*::after{box-sizing:inherit;margin:0;padding:0}
+  body{
+    font-family:"Inter",-apple-system,Helvetica,Arial,sans-serif;
+    background:#000;color:var(--ink);min-height:100%;
+  }
+  .glowbg{position:fixed;inset:0;pointer-events:none;z-index:0;
+    background:
+      radial-gradient(42% 30% at 50% 0%, rgba(41,151,255,.35), transparent 70%),
+      radial-gradient(34% 24% at 12% 20%, rgba(100,210,255,.18), transparent 70%),
+      radial-gradient(36% 26% at 88% 10%, rgba(0,113,227,.28), transparent 72%);
+    filter:blur(6px)}
+  .wrap{position:relative;z-index:1;max-width:680px;margin:0 auto;padding:28px 20px 60px}
+
+  .brand{display:flex;align-items:center;justify-content:center;gap:10px;padding-top:8px}
+  .brand svg{width:40px;height:40px;filter:drop-shadow(0 0 22px rgba(41,151,255,.6))}
+  .brand b{font-size:20px;font-weight:800;letter-spacing:-.02em}
+  .brand b i{font-style:normal;color:var(--accent2)}
+  h1{font-size:clamp(26px,6vw,34px);font-weight:700;letter-spacing:-.03em;line-height:1.1;text-align:center;margin-top:22px}
+  .lead{color:var(--ink2);text-align:center;font-size:14px;line-height:1.6;margin:12px auto 0;max-width:420px}
+
+  .sec{margin-top:34px}
+  .sec__t{font-size:12px;font-weight:700;letter-spacing:.14em;color:var(--accent2);text-transform:uppercase}
+  .sec__s{font-size:13px;color:var(--ink2);margin-top:4px;line-height:1.5}
+
+  .chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+  .chip{border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--ink);
+    border-radius:999px;padding:10px 16px;font-size:13.5px;font-weight:500;cursor:pointer;
+    transition:background .15s,border-color .15s;font-family:inherit}
+  .chip.on{background:var(--accent);border-color:var(--accent)}
+  .chip:focus-visible{outline:2px solid var(--accent2);outline-offset:2px}
+
+  .reco{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px;position:relative;overflow:hidden}
+  .reco::before{content:"";position:absolute;inset:0;pointer-events:none;background:
+      radial-gradient(60% 60% at 85% 0%, rgba(41,151,255,.28), transparent 70%);filter:blur(6px)}
+  .reco>*{position:relative}
+  .reco__k{font-size:10.5px;font-weight:700;letter-spacing:.1em;color:var(--accent2);text-transform:uppercase}
+  .reco__row{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;margin-top:6px;flex-wrap:wrap}
+  .reco__name{font-size:21px;font-weight:700;letter-spacing:-.02em}
+  .reco__time{font-size:12px;color:var(--ink2);margin-top:2px}
+  .reco__price{font-size:30px;font-weight:300;letter-spacing:-.02em;white-space:nowrap}
+  .reco__price small{display:block;font-size:10.5px;font-weight:600;color:var(--ink2)}
+  .reco ul{list-style:none;margin-top:14px;border-top:1px solid var(--line)}
+  .reco li{font-size:13px;color:#e8e8ea;padding:9px 0 9px 22px;border-bottom:1px solid var(--line);position:relative;line-height:1.4}
+  .reco li:last-child{border-bottom:none}
+  .reco li::before{content:"✓";position:absolute;left:0;color:var(--accent2);font-weight:800;font-size:12px}
+  .reco__note{font-size:11.5px;color:var(--ink2);margin-top:12px;line-height:1.5}
+
+  .opts{margin-top:14px;display:grid;gap:10px}
+  .opt{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--card);
+    border:1px solid var(--line);border-radius:14px;padding:14px 16px;cursor:pointer}
+  .opt__l{display:flex;align-items:center;gap:12px}
+  .box{width:20px;height:20px;border-radius:6px;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s,border-color .15s}
+  .opt.on .box{background:var(--accent);border-color:var(--accent)}
+  .box svg{width:12px;height:12px;opacity:0;transition:opacity .15s}
+  .opt.on .box svg{opacity:1}
+  .opt__t{font-size:14px;font-weight:500}
+  .opt__p{font-size:14px;font-weight:600;color:var(--accent2);white-space:nowrap}
+
+  .plans{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:14px}
+  .plan{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;text-align:left;font-family:inherit;color:var(--ink)}
+  .plan.on{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),0 10px 30px rgba(0,113,227,.25)}
+  .plan__n{font-size:13.5px;font-weight:700}
+  .plan__p{font-size:19px;font-weight:300;margin-top:4px}
+  .plan__p small{font-size:11px;color:var(--ink2)}
+  .plan__d{font-size:11px;color:var(--ink2);margin-top:5px;line-height:1.4}
+
+  .total{margin-top:34px;background:#0b0b0c;border:1px solid var(--line);border-radius:20px;padding:22px 20px;position:relative;overflow:hidden}
+  .total::before{content:"";position:absolute;inset:0;pointer-events:none;background:
+      radial-gradient(50% 90% at 15% 0%, rgba(41,151,255,.35), transparent 70%),
+      radial-gradient(40% 80% at 90% 100%, rgba(0,113,227,.3), transparent 72%);filter:blur(6px)}
+  .total>*{position:relative}
+  .total__k{font-size:11px;font-weight:700;letter-spacing:.12em;color:var(--accent2);text-transform:uppercase}
+  .total__lines{margin-top:12px;border-top:1px solid var(--line)}
+  .tline{display:flex;justify-content:space-between;gap:12px;font-size:13px;padding:8px 0;border-bottom:1px solid var(--line);color:#e8e8ea}
+  .tline b{font-weight:600;white-space:nowrap}
+  .tline.sum{font-size:16px;font-weight:700;color:#fff;border-bottom:none;padding-top:12px}
+  .tline.sum b{font-size:24px;font-weight:600}
+  .tline.monthly{color:var(--ink2);border-bottom:none}
+  .total__note{font-size:11px;color:var(--ink2);margin-top:10px;line-height:1.55}
+
+  .cta{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+  .btn{flex:1;min-width:180px;border:none;border-radius:999px;padding:14px 18px;font-size:14.5px;font-weight:600;cursor:pointer;font-family:inherit;text-align:center;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+  .btn--p{background:var(--accent);color:#fff}
+  .btn--s{background:rgba(255,255,255,.08);color:#fff;border:1px solid var(--line)}
+  .copied{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translateX(-50%) translateY(10px);background:#fff;color:#000;font-size:13px;font-weight:600;padding:10px 18px;border-radius:999px;opacity:0;transition:.25s;pointer-events:none;z-index:9}
+  .copied.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .foot{text-align:center;color:#6e6e73;font-size:11px;margin-top:40px;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="glowbg"></div>
+<div class="wrap">
+
+  <div class="brand">
+    <svg viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="10" fill="#0071e3"/><path d="M16 14l-6 6 6 6M24 14l6 6-6 6" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <b>Code<i>It</i></b>
+  </div>
+
+  <h1>Arma tu cotización en un minuto.</h1>
+  <p class="lead">Marca lo que tu negocio necesita y te muestro el paquete recomendado con su inversión estimada. La cotización formal se confirma en una llamada gratuita de 30 minutos.</p>
+
+  <div class="sec">
+    <div class="sec__t">1 · ¿Qué necesita tu sitio?</div>
+    <div class="sec__s">Toca todo lo que aplique.</div>
+    <div class="chips" id="needs"></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec__t">2 · Paquete recomendado</div>
+    <div class="reco" id="reco"></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec__t">3 · Adicionales</div>
+    <div class="sec__s">Opcionales. Puedes sumarlos ahora o más adelante.</div>
+    <div class="opts" id="addons"></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec__t">4 · Mantenimiento mensual</div>
+    <div class="sec__s">Tu sitio seguro y al día. Sin permanencia: cancelas con 30 días de aviso.</div>
+    <div class="plans" id="plans"></div>
+  </div>
+
+  <div class="total">
+    <div class="total__k">Tu estimado</div>
+    <div class="total__lines" id="lines"></div>
+    <div class="total__note">Precios "desde", en quetzales, sin IVA; incluyen pago con tarjeta o Visa Cuotas sin recargo. Cada proyecto se confirma con una cotización formal con vigencia de 30 días.</div>
+    <div class="cta">
+      <a class="btn btn--p" id="mailbtn" href="#">Solicitar cotización formal</a>
+      <button class="btn btn--s" id="copybtn" type="button">Copiar resumen</button>
+    </div>
+  </div>
+
+  <div class="foot">Code It · David Higueros · Senior Full Stack Developer<br>davidhigueros@gmail.com · <a href="./" style="color:#2997ff;text-decoration:none">joshhc.github.io</a></div>
+</div>
+<div class="copied" id="toast">Resumen copiado</div>
+
+<script>
+const PKGS = [
+  { id:'landing', name:'Landing Page', price:2900, time:'1 a 2 semanas',
+    items:['Diseño a medida, sin plantillas','Se adapta a cualquier pantalla','Formulario de contacto y WhatsApp','Optimizada para aparecer en Google','Medición de visitas (Google Analytics)'],
+    note:'Una página de alto impacto para presentar tu negocio y convertir visitas en contactos.' },
+  { id:'corp', name:'Sitio Corporativo', price:6900, time:'3 a 4 semanas',
+    items:['Todo lo de Landing Page','Hasta 6 secciones','Dominio .com, primer año incluido','Panel sencillo para editar tu contenido','Blog o sección de noticias','Correos con tu dominio'],
+    note:'Para empresas que quieren verse serias en internet.' },
+  { id:'store', name:'Tienda / Avanzado', price:12900, time:'5 a 8 semanas',
+    items:['Todo lo de Sitio Corporativo','Catálogo con carrito de compras','Pagos en línea','Reservas, citas o cotizador','Panel de pedidos'],
+    note:'Para negocios que venden o agendan en línea.' },
+];
+const NEEDS = [
+  { id:'presence', t:'Presentar mi negocio', lvl:0 },
+  { id:'leads',    t:'Captar clientes',      lvl:0 },
+  { id:'sections', t:'Varias secciones',     lvl:1 },
+  { id:'edit',     t:'Editar yo mismo el contenido', lvl:1 },
+  { id:'blog',     t:'Blog o noticias',      lvl:1 },
+  { id:'mail',     t:'Correos con mi dominio', lvl:1 },
+  { id:'sell',     t:'Vender en línea',      lvl:2 },
+  { id:'book',     t:'Reservas o citas',     lvl:2 },
+  { id:'quote',    t:'Cotizador en línea',   lvl:2 },
+];
+const ADDONS = [
+  { id:'sec',  t:'Sección adicional', p:550 },
+  { id:'copy', t:'Redacción de contenidos (por página)', p:350 },
+  { id:'logo', t:'Logotipo básico', p:1000 },
+  { id:'dom',  t:'Gestión de dominio y hosting', p:350 },
+];
+const PLANS = [
+  { id:'none', n:'Sin plan', p:0,    d:'Solo la garantía de 30 días incluida.' },
+  { id:'ess',  n:'Esencial', p:500,  d:'Vigilancia 24/7, respaldos y 1 h de cambios al mes.' },
+  { id:'pro',  n:'Profesional', p:900, d:'3 h de cambios al mes, velocidad y reporte de visitas.' },
+  { id:'prem', n:'Premium', p:1700, d:'6 h al mes, asesoría mensual y atención el mismo día.' },
+];
+
+const state = { needs:new Set(['presence']), addons:new Set(), plan:'none' };
+const Q = n => 'Q ' + n.toLocaleString('es-GT');
+
+function pkgFor(){
+  let lvl = 0;
+  state.needs.forEach(id => { const n = NEEDS.find(x=>x.id===id); if(n && n.lvl>lvl) lvl=n.lvl; });
+  return PKGS[lvl];
+}
+
+function render(){
+  // chips
+  document.getElementById('needs').innerHTML = NEEDS.map(n =>
+    `<button type="button" class="chip${state.needs.has(n.id)?' on':''}" data-id="${n.id}">${n.t}</button>`).join('');
+
+  // recommendation
+  const p = pkgFor();
+  document.getElementById('reco').innerHTML = `
+    <div class="reco__k">Recomendado para ti</div>
+    <div class="reco__row">
+      <div><div class="reco__name">${p.name}</div><div class="reco__time">Entrega: ${p.time}</div></div>
+      <div class="reco__price"><small>desde</small>${Q(p.price)}</div>
+    </div>
+    <ul>${p.items.map(i=>`<li>${i}</li>`).join('')}</ul>
+    <div class="reco__note">${p.note} Incluye certificado HTTPS y 2 rondas de revisión.</div>`;
+
+  // addons
+  document.getElementById('addons').innerHTML = ADDONS.map(a => `
+    <div class="opt${state.addons.has(a.id)?' on':''}" data-id="${a.id}" role="checkbox" aria-checked="${state.addons.has(a.id)}" tabindex="0">
+      <div class="opt__l"><span class="box"><svg viewBox="0 0 14 14" fill="none"><path d="M2.5 7.5l3 3 6-7" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      <span class="opt__t">${a.t}</span></div>
+      <span class="opt__p">+ ${Q(a.p)}</span>
+    </div>`).join('');
+
+  // plans
+  document.getElementById('plans').innerHTML = PLANS.map(pl => `
+    <button type="button" class="plan${state.plan===pl.id?' on':''}" data-id="${pl.id}">
+      <div class="plan__n">${pl.n}</div>
+      <div class="plan__p">${pl.p ? Q(pl.p) : 'Q 0'}<small>${pl.p?' /mes':''}</small></div>
+      <div class="plan__d">${pl.d}</div>
+    </button>`).join('');
+
+  // totals
+  const adds = ADDONS.filter(a=>state.addons.has(a.id));
+  const addSum = adds.reduce((s,a)=>s+a.p,0);
+  const plan = PLANS.find(x=>x.id===state.plan);
+  let lines = `<div class="tline"><span>${p.name}</span><b>desde ${Q(p.price)}</b></div>`;
+  adds.forEach(a=> lines += `<div class="tline"><span>${a.t}</span><b>+ ${Q(a.p)}</b></div>`);
+  lines += `<div class="tline sum"><span>Inversión única</span><b>desde ${Q(p.price+addSum)}</b></div>`;
+  if(plan.p) lines += `<div class="tline monthly"><span>Mantenimiento ${plan.n}</span><b>+ ${Q(plan.p)} /mes</b></div>`;
+  document.getElementById('lines').innerHTML = lines;
+
+  // mail link
+  const summary = buildSummary(p, adds, addSum, plan);
+  const mail = 'mailto:davidhigueros@gmail.com?subject=' + encodeURIComponent('Cotización Code It: ' + p.name)
+             + '&body=' + encodeURIComponent(summary + '\n\nMi nombre:\nMi negocio:\nTeléfono / WhatsApp:');
+  document.getElementById('mailbtn').setAttribute('href', mail);
+}
+
+function buildSummary(p, adds, addSum, plan){
+  let s = 'Hola David, armé mi estimado en el cotizador de Code It:\n\n';
+  s += '· Paquete: ' + p.name + ' (desde ' + Q(p.price) + ')\n';
+  adds.forEach(a => s += '· ' + a.t + ' (+ ' + Q(a.p) + ')\n');
+  s += '· Inversión única: desde ' + Q(p.price + addSum) + '\n';
+  if(plan.p) s += '· Mantenimiento ' + plan.n + ': ' + Q(plan.p) + ' /mes\n';
+  s += '\nNecesito: ' + [...state.needs].map(id => NEEDS.find(n=>n.id===id).t).join(', ') + '.';
+  return s;
+}
+
+document.addEventListener('click', e => {
+  const chip = e.target.closest('.chip');
+  if(chip){ const id=chip.dataset.id; state.needs.has(id)?state.needs.delete(id):state.needs.add(id); if(!state.needs.size) state.needs.add('presence'); render(); return; }
+  const opt = e.target.closest('.opt');
+  if(opt){ const id=opt.dataset.id; state.addons.has(id)?state.addons.delete(id):state.addons.add(id); render(); return; }
+  const plan = e.target.closest('.plan');
+  if(plan){ state.plan = plan.dataset.id; render(); return; }
+});
+document.addEventListener('keydown', e => {
+  if(e.key===' '||e.key==='Enter'){ const opt=e.target.closest('.opt'); if(opt){ e.preventDefault(); opt.click(); } }
+});
+document.getElementById('copybtn').addEventListener('click', async () => {
+  const p = pkgFor();
+  const adds = ADDONS.filter(a=>state.addons.has(a.id));
+  const plan = PLANS.find(x=>x.id===state.plan);
+  const text = buildSummary(p, adds, adds.reduce((s,a)=>s+a.p,0), plan);
+  try{ await navigator.clipboard.writeText(text); }
+  catch(err){ const ta=document.createElement('textarea'); ta.value=text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
+  const t=document.getElementById('toast'); t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1600);
+});
+render();
+</script>
+</body>
+</html>
